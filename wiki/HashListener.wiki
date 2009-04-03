@@ -20,8 +20,17 @@ HashListener is pure JavaScript, it works with our without any JavaScript framew
 
 HashListener 2.0 was tested on: IE 6+, Firefox 2+, Safari 4, opera 9+ and google Chrome 1+. It might work as well on other browsers based on Webkit and Genko. 
 
+= Usage =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+Basic object to allow updating the hash part of the document location. Mozilla always adds an entry to the history but for IE the library add an optional flag whether to add an entry to the history and if this is set an iframe is used to support this behavior (this is on by default). 
+
+When the hash value changes onHashChanged is called. Override this to do your own callbacks.
+
+ * Usage:   Include script
+ *          hashListener.onHashChanged = fn //Override onHashChanged 
+
+Is possible to manipulate the hash even without links, you can set and read the hash in you own scripts.
+ 
+ * Usage:   in any script
+ *          hashListener.setHash(newstate) //Set hash by hand
+ *          hashListener.getHash() //read current hash
