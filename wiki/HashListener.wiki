@@ -26,11 +26,11 @@ Basic object to allow updating the hash part of the document location. Mozilla a
 
 When the hash value changes onHashChanged is called. Override this to do your own callbacks.
 
- * Usage:   Include script
- *          hashListener.onHashChanged = fn //Override onHashChanged 
+  Usage:   Include script
+           hashListener.onHashChanged = fn //Override onHashChanged 
 
 Is possible to manipulate the hash even without links, you can set and read the hash in you own scripts.
  
- * Usage:   in any script
- *          hashListener.setHash(newstate) //Set hash by hand
- *          hashListener.getHash() //read current hash
+  Usage:   in any script
+           hashListener.setHash(newstate) //Set hash by hand
+           hashListener.getHash() //read current hash
