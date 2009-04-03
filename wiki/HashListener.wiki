@@ -1,0 +1,27 @@
+#summary One-sentence summary of this page.
+#labels Phase-Implementation,Featured
+
+= Introduction =
+
+Whenever a link is called the browser sends a request to the server and reloads the current page... Except when the link points to some hash "#" in the same page. That's the trick! Hash links don't reload the page! The Hash can make Ajax applications Navigable!
+
+But the things are not that simple, and the reason is called "Browser Incompatibility". Some browser don't follow W3 standards and others implements the same thing in very different ways. some years ago the things was even worst. In the web there are many solutions for the Ajax "bookmark" and "back" problems. The best one I've found was Erik Arvidsson's Hash Listener library -- There was some bugs yet -- I've fixed all bugs I've found, and made many improvements then HashListener 2.0 was born!
+
+HashListener 2.0 for web 2.0! Sounds good...
+
+= Details =
+
+
+HashListener is a library that consist of one JavaScript Object called hashListener. It serves to set and get the hash "#" of the page's URL, and to call onHashChanged whenever the hash changes. The function onHashChanged need to be overwritten in your code to call Ajax or do whatever you whant in responce to changes in the hash.
+
+When a Hash Link is called the hashListener altomaticaly update the navigation history and call onHashChanged. You can set the Hash by hand using hashListener.set('newhash') in any JavaScript fuction. This alow you to control the state of the page anywhere even without links.
+
+HashListener is pure JavaScript, it works with our without any JavaScript framework. 
+
+HashListener 2.0 was tested on: IE 6+, Firefox 2+, Safari 4, opera 9+ and google Chrome 1+. It might work as well on other browsers based on Webkit and Genko. 
+
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
