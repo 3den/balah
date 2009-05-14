@@ -1,0 +1,152 @@
+#summary One-sentence summary of this page.
+#labels balah,demo
+
+= What is BALAH =
+
+In Brazil "bala" means the Bullet of a Gun, On this article I try to define a new technique called BALAH that stands for Bookmarkable/Back Ajax Links And HTTP. The goal BALAH means to pass though the walls that stands on the way of Ajax applications. Allowing you to create unobstructed web applications that can work anyway with or without ajax, and making asynchronous content searchable, indexable (SEO) and navigable ("back", "forward", "bookmark"). BALAH must be simple and flexible enough to be adapted to any web framework. In this article build a sample PHP demo, but it shall not be hard to adapt its concepts to any server-side language.
+
+Ajax gives more interactivity and performance to web sites. By loading dynamical content without reloading the page It makes web-applications looks cool, faster and with more interactivity. But Ajax isn't a silver bullet to solve all problems on the web. In fact it also brings some new problems with it. In Ajax the whole application lives in a single page, contents change but the browser does not know. Users expect that sites behave in a certain way, when they click "back" they want to see the previous state of the site, not the previous website. They want to bookmark the content they liked and when they sent the URL to a friend then expect that their friend shall see the same content that he did. They want to navigate through the pages, so websites must be navigable!
+
+All this thinks works fine on synchronous applications. So usually when navigability is really important Ajax is only used only on visual effects or contents of low relevance that don't need to be saved. I'm not the first one trying to solve this "bugs". There are saw some cool sites with navigable Ajax, and some other libraries for this propose. I had done a deep research to find an optimal solution for this navigation bugs of Ajax Applications, some the ideas found here are based on: Mike Stenhouse's "Fixing the Back Button and Enabling Bookmarking for AJAX Applications" article, Erik Arvidsson's Hash Listener library, and the Brad Neuberg's Really Simple History.
+
+But if we solve all the previous bugs, building a cool, good looking and navigable ajax website, what will happens if the the user don't support your JavaScript code?
+Sadly nothing will happens, all asynchronous content will be broken, and the Ajax links shall have no meaning at all. Therefore the whole application became unusable. Keep reading to learn how to workaround this problems too...
+
+You can say that every modern browser supports Ajax, and every user of web applications have one of those browsers... But that's not true, There is a lot of users that never do updates, they still surfing with IE-3, Netscape or other legacy browsers till their computers explode, they don't expect pages to look cool, they just need it to be usable... And don't forget a very important guest... The Search Bot! Search Robots don't execute JavaScript so all Ajax links became broken. Is very hard to Index asynchronous content because search bots can't see it. So this is our worst nightmare when dealing with ajax websites. But fear not! BALAH workaround all this bugs making Ajax calls unobstructed. Links only became asynchronous on-the-fly, so the content only became asynchronous if supported by the Browser, otherwise the application will just work in the good-and-old synchronous way!
+
+Tunning an existent synchronous website into BALAH, is simple.
+
+    * The first premises of BALAH is: All features of your applications must work synchronously before going asynchronous! Most web frameworks easily do that (MVC is usually better). Here we'll be build a very simple framework called ServerBALAH.
+    * The other premise is: The website shall only became asynchronous on-the-fly, and only if all asynchronous features (including functionalities and navigability) are supported by the client's browser! otherwise the application keep synchronous. On the client side you'll uses a simple library called HashListener 2.0, All asynchronous requests will pass through this guy, and it will deal to set and update the state of the site, using the HASH "#" of the URL, this is how ajax became navigable.
+      example:
+
+      http://yoursite.cm/page#this-is-the-hash
+
+So BALAH shoots both ways, following you will see an sample demo here, where ServerBALAH stands for the part implemented with a server language, all functionalities must be there, in this article I do it using PHP, but it can also be done using Python, Java, or any server side language you choose. And ClientBALAH that stands for the JavaScript code executed in the browser to make the application asynchronous On-the-Fly. The links must be generated in the server-side framework to be synchronous (non-ajax), and in the client-side (JavaScript) the links are changed on-the-fly -- ONLY if everything is supported by the client -- to a "#" (hash) link which indicates what content to load asynchronously, then the content is loaded inside the target element and the page is update without reloading! 
+
+
+= Shooting the SeverBALAH =
+ Has been sad, somewhere, that before building an Asynchronous application, the application must work synchronously. this idea is the basis of BALAH. Is mandatory that your application have all needed features working perfectly in a synchronous way, before going asynchronous. Piece of cake! Any web framework follow some standards to build links and include content, and this standards can be easily adapted to generate BALAH Links.
+
+This chapter explain how to build a simple BALAH framework all from the scratch, The result will be only one class, with less than 90 lines of code, including a lot of comments. This can be all you need to build a simple applications, but for big ones you need to understand those principles and use some creativity.
+
+Below I will defines a very simple class called ServerBALAH, that works as a BALAH stand-alone framework on the server-side. This class can be freely changed to fit your application. All content of this chapter is based on the demo found on http://3den.org/balah/. You can download the ServerBALAH class at http://3den.org/balah/libs/
+Class-diagram that explains ServerBALAH Class.
+
+The constructor method will sets the attributes balah and URI. both are used to build BALAH links and load contents. the attribute BALAH is a flag what indicate what links are BALAH Links. Is important to add some kind of flag to mark BALAH links, so clientBALAH will know what contents shall became asynchronous but if you want to make every link asynchronous the BALAH flag is not needed. This flag can be a GET attribute, and the value of that GET attribute can be path to the piece of content that must be loaded. Or just some GET attribute with a boolean value that indicates if the Link is BALAH or not.
+
+The build_link method is very simple it takes path as parameter then add the BALAH flag to it and return the result. The href of all BALAH Links must be created through this method, like:
+<a href="<?php echo $balah->build_link('index.php?q=/node/hello_world'); ?>">Hello World</a>
+This way we are marking what links are BALAH Links, this function can be build on top of your framework's build link method. The result is a synchronous links that your framework can understand and include in the right place.
+
+The include_httpage method takes default home content that will be included when no request was found and define a javascript *constant BALAH_HOME that will be used for the same prorpose on client-side. when the request call some content to load these content will be used istead of home. This method will be called once inside the HTML element where the content shall go:
+{{{
+<div id="main"><?php $balah->include_httpage('index.php?q=/home'); ?>"></div>
+}}}
+So whenever a synchronous request is made the content will inculede inside the element #main..
+
+The js_header method define the JavaScript costants that will be used in the client side to make links asynchronos. It is called in the header of the page:
+{{{
+<head>
+  <?php $balah->js_header(); ?>
+  ...
+</head>
+}}}
+This will set the javascript constants explaned better on next chapter.
+
+* JavaScript don't really have constants, so a common workaround is to uppercase variables. Any JavaScript "constants" are in fact variables.
+
+The $balah Object
+
+The object $balah means to be singleton and available in all pages of the application. As pages can be called asynchronous instead of calling it directly we create a file to intermediate these call to make $balah available in asynchronous contents, this file  does:
+<?php
+    // Include lib and create object
+    require_once ('libs/server_balah.php');
+    $balah = new ServerBALAH('f_balah');
+        
+     // Include page using balah object
+     $balah->include_httpage('intro.php';);
+?>
+
+The index.php file will also use the $balah object, so the first lines of index.php will instanciate the object the same way as above, to make $balah available in synchronous contents:
+<?php
+ // Include lib and create object
+    require_once ('libs/server_balah.php');
+    $balah = new ServerBALAH('f_balah');  
+?>
+
+To replaced ServerBALAH class by other frameworks the changes needed and level of complexity depends on the architecture, MVC frameworks are usually more flexible and easier. 
+
+== Shooting the ClientBALAH ==
+ Whenever a link is called the browser sends a request to the server and reloads the current page... Except when the link points to some hash "#" in the same page... That's the trick! Hash links don't reload the page! The Hash can make Ajax applications Navigable!
+
+But the things are not that simple, and the reason is called "Browser Incompatibility". Some browser just don't follow W3C standards and others implements the same thing in very different ways. Some years ago the things was even worst... There are many solutions for the Ajax "bookmark" and "back" problems in the web. But there wasn't, till now, a really simple and stable one. The best one I've found was Erik Arvidsson's Hash Listener library, but there was many bugs yet. I've used that as base, fixed all bugs I've found, and made many improvements to release HashListener 2.0!
+
+Well, HashListener 2.0 for web 2.0! Sounds good... you can download it here.
+
+HashListener is a library that consist of one JavaScript Object called hashListener. It serves to set and get the hash "#" of the page's URL, and call onHashChanged whenever the hash changes. The function onHashChanged need to be overwritten in your code to call Ajax or do whatever you whant in responce to changes in the hash.
+
+When a Hash Link is called the hashListener automatically update the navigation history and call onHashChanged. You can set the hash by hand using hashListener.setHash('newhash'), and get the current hash using hashListener.getHash(). This alow you to control the state of the page anywhere on your JavaScript functions, even without using links.
+
+HashListener is pure JavaScript, it works with our without any JavaScript framework. in this sample I'll be using jQuery, but nothing stops you to use HashListener with Mootools, Dojo... or pure JavaScript. HashListener 2.0 was tested on: IE 6+, Firefox 2+, Safari 4, opera 9+ and google Chrome 1+.
+
+HashListener is used by ClientBALAH to guaranty that the page will be navigable in the client browser. When the browser is incompatible than hashListener.init() returns false, ClienBALAH is aborted and the site will work in the good-and-old synchronous way. In most of the cases the browser will be compatible, so ClientBALAH will override onHashChanged function to make it call the piece of content refered by the Hash asynchronously. And Convert the synchronous Links to hash/asynchronous Links on-the-fly whenenver they are called, the result is loaded in the target HTML element.
+
+The usecase diagram bellow explains what happens when a BALAH Link is called.
+
+When a BALAH link is called there are two possible workflows:
+
+    * If the Browser is incompatible. (JavaScript does nothing)
+         1. Click Link: A BALAH link is called.
+         2. Sync Request: A normal synchronous request is made, and the page is reloaded.
+         3. Update Page: the ServerBALAH framework update the content.
+    * If the browser is compatible. (Ajax)
+         1. Click Link: A BALAH link is called.
+         2. Sync to Async: The the BALAH part of the link became an local Hash, so page don't reload.
+         3. Call Ajax: The hash value is a path to a piece of content that will be called asyncronously.
+         4. Update Page: only target element is updated.
+
+When the browser is compatible links like like http://mysite.com/?BALAH=somepage.php became http://mysite.com/#somepage.php.
+
+ClientBALAH is build to be adapted to the ServerBALAH structure because it use some data that are defined in server-side, these data are the HREF of BALAH Links and the JavaScript constants:
+
+    * BALAH_HOME: the default page to load when there is nothing in the Hash.
+    * BALAH: the flag that identify BALAH links.
+    * BALAH_TARGET: the default target element where asynchronous content is loaded.
+    * BALAH_REGEX: Regular expression to help convert Sync links to Async hashes.
+
+The Class diagram bellow explain ClientBALAH object, the code is also self explained and with many good comments. You can see ClientBALAH code at http://3den.org/balah/libs/client_balah.js
+
+The target attribute will be dynamically changed when links are clicked, so the links target can be like target="#element". If it is not defined the BALAH_TARGET will be used instead.
+
+The init method is where the magic begins, the links became asynchronous only when clicked so we must redefine the onclick event of all BALAH Links, using jQuery the code to change the onclick event looks like:
+{{{
+// Change onClick event of all Balah links
+$('a[href*='+ BALAH +']').click(function(){
+    // Link Element
+    var a = $(this);
+   
+    // HREF became an asynchronous Hash link
+    var url = a.attr('href').replace(BALAH_REGEX, '#');
+    a.attr('href', url);
+
+    // Set target element
+    self.target = a.attr('target') || BALAH_TARGET;
+});
+}}}
+
+The call method load the content inside the target element, asynchronously. it will be caled whenever the hash changes, on init method we'll also make this asignement:
+{{{
+// the hash changed? Call Balah!
+hashListener.onHashChanged = self.call;
+}}}
+
+* For more details take a look at http://3den.org/balah/libs/client_balah.js 
+
+ All Together Now!
+
+Now is up to you to put BALAH is use, I hope this can help you to create better websites, and to make even better Ajax Application. All I've defined here was just a sample demo, BALAH is not the code, BALAH is an idea about how to make Cool, Unstopable and Navigable websites.
+
+HashListener 2.0 is licensed under BSD terms, so you can freely use it, change it, sell it and do whatever the BSD license allows. Its was build because some browsers save (or don't save) hash links in the navigation historic, in very diferent ways. HashListener is part of the BALAH Technique, but can also be used as a stand alone library.
+
+The ServerBALAH and ClientBALAH are also licensed under BSD. You can try a BALAH demo on http://3den.org/balah there you can also download the entire demo, to study and use as base to build your own BALAH unstoppable and asynchronous framework. The sources are all hosted on http://code.google.com/p/balah. I tryed to documented every important peace of code with comments to make it easyer to understand but if something got confuse please contact me so i can give you more details about how it works. 
