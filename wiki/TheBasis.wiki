@@ -1,9 +1,7 @@
-#summary One-sentence summary of this page.
 #labels balah,demo
+#In Brazil "bala" means the Bullet of a Gun, On this article I try to define a new technique called BALAH that stands for Bookmarkable/Back Ajax Links And HTTP. The goal BALAH means to pass though the walls that stands on the way of Ajax applications. Allowing you to create unobstructed web applications that can work anyway with or without ajax, and making asynchronous content searchable, indexable (SEO) and navigable ("back", "forward", "bookmark"). BALAH must be simple and flexible enough to be adapted to any web framework. In this article build a sample PHP demo, but it shall not be hard to adapt its concepts to any server-side language.
 
 = What is BALAH =
-
-In Brazil "bala" means the Bullet of a Gun, On this article I try to define a new technique called BALAH that stands for Bookmarkable/Back Ajax Links And HTTP. The goal BALAH means to pass though the walls that stands on the way of Ajax applications. Allowing you to create unobstructed web applications that can work anyway with or without ajax, and making asynchronous content searchable, indexable (SEO) and navigable ("back", "forward", "bookmark"). BALAH must be simple and flexible enough to be adapted to any web framework. In this article build a sample PHP demo, but it shall not be hard to adapt its concepts to any server-side language.
 
 Ajax gives more interactivity and performance to web sites. By loading dynamical content without reloading the page It makes web-applications looks cool, faster and with more interactivity. But Ajax isn't a silver bullet to solve all problems on the web. In fact it also brings some new problems with it. In Ajax the whole application lives in a single page, contents change but the browser does not know. Users expect that sites behave in a certain way, when they click "back" they want to see the previous state of the site, not the previous website. They want to bookmark the content they liked and when they sent the URL to a friend then expect that their friend shall see the same content that he did. They want to navigate through the pages, so websites must be navigable!
 
