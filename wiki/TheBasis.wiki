@@ -1,4 +1,4 @@
-#labels balah,demo
+#labels balah,demo,Featured
 In Brazil "bala" means the Bullet of a Gun, On this article I try to define a new technique called BALAH that stands for Bookmarkable/Back Ajax Links And HTTP. The goal BALAH means to pass though the walls that stands on the way of Ajax applications. Allowing you to create unobstructed web applications that can work anyway with or without ajax, and making asynchronous content searchable, indexable (SEO) and navigable ("back", "forward", "bookmark"). BALAH must be simple and flexible enough to be adapted to any web framework. In this article build a sample PHP demo, but it shall not be hard to adapt its concepts to any server-side language.
 
 = What is BALAH =
