@@ -28,8 +28,7 @@ So BALAH shoots both ways, following you will see an sample demo here, where Ser
 
 This chapter explain how to build a simple BALAH framework all from the scratch, The result will be only one class, with less than 90 lines of code, including a lot of comments. This can be all you need to build a simple applications, but for big ones you need to understand those principles and use some creativity.
 
-Below I will defines a very simple class called ServerBALAH, that works as a BALAH stand-alone framework on the server-side. This class can be freely changed to fit your application. All content of this chapter is based on the demo found on http://3den.org/balah/. You can download the ServerBALAH class at http://3den.org/balah/libs/
-Class-diagram that explains ServerBALAH Class.
+Below I will defines a very simple class called ServerBALAH, that works as a BALAH stand-alone framework on the server-side. This class can be freely changed to fit your application. All content of this chapter is based on the demo found on http://on.3den.org/balah/. You can download the ServerBALAH class at http://on.3den.org/balah/libs/.
 
 The constructor method will sets the attributes balah and URI. both are used to build BALAH links and load contents. the attribute BALAH is a flag what indicate what links are BALAH Links. Is important to add some kind of flag to mark BALAH links, so clientBALAH will know what contents shall became asynchronous but if you want to make every link asynchronous the BALAH flag is not needed. This flag can be a GET attribute, and the value of that GET attribute can be path to the piece of content that must be loaded. Or just some GET attribute with a boolean value that indicates if the Link is BALAH or not.
 
