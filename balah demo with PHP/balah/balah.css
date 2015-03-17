@@ -1,0 +1,21 @@
+h1{
+	background: url(./images/Bullet.gif) top left no-repeat;
+	width: 750px;
+	height: 250px;
+}
+h1 span{
+	display:none;
+}
+
+#footer{
+	position: absolute;
+	bottom: 0px;
+	text-align: center;
+	display: block;
+	width: 100%;
+}
+
+.menu li{
+	margin: 4px;
+	display: inline;
+}
